@@ -1,0 +1,658 @@
+% !TEX TS-program = XeLaTeX
+% !TEX encoding = UTF-8 Unicode
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  华东理工大学本硕博论文 XeLaTeX 模版 —— 主文件 main.tex
+%
+%  版本：1.0.0
+%  最后更新：
+%  修改者：Liu Qipei, Wu Xinying, liuqipei@hrbeu.edu.cn, y10170069@mail.ecust.edu.cn
+%  修订者：
+%  编译环境1：macOS 10.13  + TeXLive 2020
+%  编译环境2：Windows 10  + TeXLive 2020
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 页面设置
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% A4 纸张
+\setlength{\paperwidth}{210mm}
+\setlength{\paperheight}{297mm}
+
+% 设置正文尺寸大小
+\setlength{\textwidth}{160mm}
+\setlength{\textheight}{245mm}
+
+% 设置正文区在正中间
+\newlength \mymargin
+\setlength{\mymargin}{(\paperwidth-\textwidth)/2}
+\setlength{\oddsidemargin}{(\mymargin)-1in}
+\setlength{\evensidemargin}{(\mymargin)-1in}
+
+% 设置正文区偏移量，奇数页向右偏，偶数页向左偏
+\newlength \myshift
+\setlength{\myshift}{0mm}    % 双面打印的奇偶页偏移值，可根据需要修改，建议小于 5mm
+\addtolength{\oddsidemargin}{\myshift}
+\addtolength{\evensidemargin}{-\myshift}
+
+% 页眉页脚相关距离设置
+\setlength{\voffset}{-5.4mm} % 设置水平基线位置
+\setlength{\topmargin}{0mm}  % 设置页眉距水平基线位置
+\setlength{\headheight}{5mm} % 设置页眉高度
+\setlength{\headsep}{8mm}    % 页眉与正文的距离
+\setlength{\footskip}{6mm}   % 页脚与正文距离
+
+% 公式的精调
+\allowdisplaybreaks[4]  % 可以让公式在排不下的时候分页排，这可避免页面有大段空白。
+
+% 下面这组命令使浮动对象的缺省值稍微宽松一点，从而防止幅度
+% 对象占据过多的文本页面，也可以防止在很大空白的浮动页上放置很小的图形。
+\renewcommand{\topfraction}{0.9999999}
+\renewcommand{\textfraction}{0.0000001}
+\renewcommand{\floatpagefraction}{0.9999}
+
+% defaultfont 默认字体命令
+\def\defaultfont{\renewcommand{\baselinestretch}{1.25} \daxiaosi}
+%  \fontsize{12pt}{15pt}\selectfont}
+
+% 设置目录字体和行间距
+\def\defaultmenufont{\renewcommand{\baselinestretch}{1.22} \xiaosi}
+%  \fontsize{12pt}{15pt}\selectfont}
+
+% 固定距离内容填入及下划线
+\makeatletter
+\newcommand\fixeddistanceleft[2][10mm]{{\hb@xt@ #1{#2\hss}}}
+\newcommand\fixeddistancecenter[2][10mm]{{\hb@xt@ #1{\hss#2\hss}}}
+\newcommand\fixeddistanceright[2][10mm]{{\hb@xt@ #1{\hss#2}}}
+\newcommand\fixedunderlineleft[2][10mm]{\underline{\hb@xt@ #1{#2\hss}}}
+\newcommand\fixedunderlinecenter[2][10mm]{\underline{\hb@xt@ #1{\hss#2\hss}}}
+\newcommand\fixedunderlineright[2][10mm]{\underline{\hb@xt@ #1{\hss#2}}}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 标题环境相关
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%判断单双面打印类型
+\newif\ifoneortwosidetwoside
+\newif\ifoneortwosideoneside
+
+\def\temp{twoside}
+\ifx\temp\oneortwoside
+  \oneortwosidetwosidetrue  \oneortwosideonesidefalse
+\fi
+
+\def\temp{oneside}
+\ifx\temp\oneortwoside
+  \oneortwosidetwosidefalse  \oneortwosideonesidetrue
+\fi
+
+%判断论文类型
+% 声明三个论文类型逻辑型变量
+\newif\ifxueweidoctor
+\newif\ifxueweimaster
+\newif\ifxueweibachelor
+
+% 根据 \xuewei 的定义为 \xueweidoctor \xueweimaster \xueweibachelor 赋值
+\def\temp{Doctor}
+\ifx\temp\xuewei % \ifx 用于判断两个变量是否匹配
+  \xueweidoctortrue  \xueweimasterfalse \xueweibachelorfalse
+\fi
+\def\temp{Master}
+\ifx\temp\xuewei
+  \xueweidoctorfalse  \xueweimastertrue \xueweibachelorfalse
+\fi
+\def\temp{Bachelor}
+\ifx\temp\xuewei
+  \xueweidoctorfalse  \xueweimasterfalse \xueweibachelortrue
+\fi
+
+\ifxueweidoctor
+  \newcommand{\cnxuewei}{博士}
+  \newcommand{\enxuewei}{Doctor}
+\fi
+
+\ifxueweimaster
+  \newcommand{\cnxuewei}{硕士}
+  \newcommand{\enxuewei}{Master}
+\fi
+
+\ifxueweibachelor
+  \newcommand{\cnxuewei}{学士}
+  \newcommand{\enxuewei}{Bachelor}
+\fi
+
+%定义 学科 学位
+\def \xuekeEngineering {Engineering}
+\def \xuekeScience     {Science}
+\def \xuekeManagement  {Management}
+\def \xuekeArts        {Arts}
+\def \xuekePhilosophy  {Philosophy}
+\def \xuekeEconomics   {Economics}
+\def \xuekeLaws        {Laws}
+\def \xuekeEducation   {Education}
+\def \xuekeHistory     {History}
+
+
+\ifx \xueke \xuekeEngineering
+\newcommand{\cnxueke}{工学}
+\newcommand{\enxueke}{Engineering}
+\newcommand{\enxk}   {Eng}
+\fi
+
+\ifx \xueke \xuekeScience
+\newcommand{\cnxueke}{理学}
+\newcommand{\enxueke}{Science}
+\newcommand{\enxk}   {Sci}
+\fi
+
+\ifx \xueke \xuekeManagement
+\newcommand{\cnxueke}{管理学}
+\newcommand{\enxueke}{Management}
+\newcommand{\enxk}   {Man}
+\fi
+
+\ifx \xueke \xuekeArts
+\newcommand{\cnxueke}{文学}
+\newcommand{\enxueke}{Arts}
+\newcommand{\enxk}   {Art}
+\fi
+
+\ifx \xueke \xuekePhilosophy
+\newcommand{\cnxueke}{哲学}
+\newcommand{\enxueke}{Philosophy}
+\newcommand{\enxk}   {Phi}
+\fi
+
+\ifx \xueke \xuekeEconomics
+\newcommand{\cnxueke}{经济学}
+\newcommand{\enxueke}{Economics}
+\newcommand{\enxk}   {Eco}
+\fi
+
+\ifx \xueke \xuekeLaws
+\newcommand{\cnxueke}{法学}
+\newcommand{\enxueke}{Laws}
+\newcommand{\enxk}   {Law}
+\fi
+
+\ifx \xueke \xuekeEducation
+\newcommand{\cnxueke}{教育学}
+\newcommand{\enxueke}{Education}
+\newcommand{\enxk}   {Edu}
+\fi
+
+\ifx \xueke \xuekeHistory
+\newcommand{\cnxueke}{历史学}
+\newcommand{\enxueke}{History}
+\newcommand{\enxk}   {His}
+\fi
+
+% 定义、定理等环境
+\theoremstyle{plain}
+\theoremheaderfont{\hei\bf}
+\theorembodyfont{\song\rmfamily}
+\newtheorem{definition}{\hei 定义}[chapter]
+\newtheorem{example}{\hei 例}[chapter]
+\newtheorem{algorithm}{\hei 算法}[chapter]
+\newtheorem{theorem}{\hei 定理}[chapter]
+\newtheorem{axiom}{\hei 公理}[chapter]
+\newtheorem{proposition}[theorem]{\hei 命题}
+\newtheorem{property}{\hei 性质}
+\newtheorem{lemma}[theorem]{\hei 引理}
+\newtheorem{corollary}{\hei 推论}[chapter]
+\newtheorem{remark}{\hei 注解}[chapter]
+\newenvironment{proof}{\hei{证明}　}{\hfill $\square$ \vskip 4mm}
+
+% 目录标题
+\renewcommand{\contentsname}{\hfill \hei 目~~~~录 \hfill}
+\renewcommand{\listfigurename}{\hfill 插~图~目~录 \hfill}
+\renewcommand{\listtablename}{\hfill 表~格~目~录 \hfill}
+\renewcommand{\bibname}{\hfill 参~考~文~献 \hfill}
+\renewcommand\appendixname{附~录}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 段落章节相关
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+\setcounter{chapter}{0}
+
+% 设置章、节、小节、小小节的间距
+%\titleformat{\chapter}[hang]{\normalfont\xiaosan\hei\sf}{\xiaosan\thechapter}{1em}{\xiaosan}
+\titleformat{\chapter}{\centering\sihao\hei\sf}{第\,\thechapter\,章}{1em}{} % 设置中文章格式中央对齐：第  章
+\titlespacing{\chapter}{0pt}{-3ex  plus .1ex minus .2ex}{3.3ex}
+\titleformat{\section}[hang]{\xiaosi\song\sf}{\xiaosi\thesection}{1em}{}{}
+\titlespacing{\section}{0pt}{0.5em}{0.5em}
+\titleformat{\subsection}[hang]{\xiaosi\song}{\xiaosi\thesubsection}{1em}{}{}
+\titlespacing{\subsection}{0pt}{0.5em}{0.3em}
+\titleformat{\subsubsection}[hang]{\xiaosi\hei\sf}{\xiaosi\thesubsubsection}{1em}{}{}
+\titlespacing{\subsubsection}{0pt}{0.3em}{0pt}
+
+% 缩小目录中各级标题之间的缩进
+% \dottedcontents{<section>}[<left>]{<above>}{<labelwidth>}{<leaderwidth>}
+\dottedcontents{chapter}[3mm]{\vspace{0.2em}}{1.0em}{5pt}
+\dottedcontents{section}[8mm]{}{1.8em}{5pt}
+\dottedcontents{subsection}[23mm]{}{2.7em}{5pt}
+\dottedcontents{subsubsection}[33mm]{}{3.4em}{5pt}
+
+% 设置目录中各级标题之间的缩进
+\makeatletter
+\renewcommand*{\l@chapter}{\@dottedtocline{0}{0em}{1em}}% 细点\@dottedtocline  粗点\@dottedtoclinebold
+\renewcommand*{\l@section}{\@dottedtocline{1}{0em}{2em}}
+\renewcommand*{\l@subsection}{\@dottedtocline{2}{0em}{3em}}
+\renewcommand*{\l@subsubsection}{\@dottedtocline{3}{0em}{4em}}
+
+% 设置章标题格式
+% \titlecontents{章节名称}[左端距离]{标题字体、与上文间距等}{标题序号}{空}{引导符和页码}[与下文间距]
+% 设置目录的点间距
+\titlecontents{chapter}[3.8em]{\hspace{-3.8em}\hei}{第~\thecontentslabel~章~~\hspace{.6em}}{}{\titlerule*[8pt]{.}\contentspage}
+
+% 段落之间的竖直距离
+\setlength{\parskip}{1.2pt}
+% 段落缩进
+\setlength{\parindent}{24pt}
+% 定义行距
+\renewcommand{\baselinestretch}{1.25}
+% 参考文献条目间行间距
+\setlength{\bibsep}{2pt}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 页眉页脚设置
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\makeheadrule}{%
+    \rule[12pt]{\textwidth}{0.5pt} \\[-23pt]
+%    \rule{\textwidth}{2.0pt}
+  \vskip-.8\baselineskip}
+
+\makeatletter
+\renewcommand{\headrule}{%
+  {\if@fancyplain\let\headrulewidth\plainheadrulewidth\fi
+    \makeheadrule}}
+
+\pagestyle{fancyplain}
+
+%去掉章节标题中的数字
+%%不要注销这一行，否则页眉会变成：“第1章1  绪论”样式
+\renewcommand{\chaptermark}[1]{\markboth{第\thechapter 章~~~~\ #1}{}}
+\fancyhf{}
+
+% 附录设置：附录不编章节号，但列入目录和页眉
+\renewcommand{\appendix}[1]{%
+    \chapter*{#1}%
+    \addcontentsline{toc}{chapter}{#1}%
+    \markboth{#1}{#1}
+}
+
+%在book文件类别下,\leftmark自动存录各章之章名,\rightmark记录节标题
+%根据单双面打印设置不同的页眉；
+\fancyhead[CO]{\song\xiaosi{\sihao\kai\textbf{\@cnuniversty}}~~\cnxuewei 学位论文\hfill{第$~\thepage~$页}}
+\fancyhead[CE]{\song\xiaosi{第$~\thepage~$页\hfill{\sihao\kai\textbf{\@cnuniversty}}~~\cnxuewei 学位论文}}
+%\fancyfoot[C,C]{\xiaosi$-$~\thepage~$-$}
+
+%偶数页为空白页面时处理
+%\makeatletter
+%\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else%
+%  \hbox{}%
+%%  \thispagestyle{empty}%   % 清除页眉、页脚
+%  \vspace*{80mm}
+%  \centerline{\xiaoer\song {{（此页无正文）}}}
+%  \centerline{\xiaosi\song {{(THIS PAGE IS INTENTIONALLY LEFT BLANK)}}}
+%  \newpage%
+%  \if@twocolumn\hbox{}\newpage\fi\fi\fi}
+
+\makeatletter
+\def\cleardoublepage{\newpage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 列表环境设置
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setlist[enumerate]{(1),itemsep=-5pt,topsep=0mm,labelindent=\parindent,leftmargin=*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 国际单位，以点连接。
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\sisetup{inter-unit-product = { }\cdot{ }}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 参考文献的处理
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \addtolength{\bibsep}{-0.5 em}      % 缩小参考文献间的垂直间距
+% 上标引用，比\cite位置更偏上、字号稍小
+\DeclareRobustCommand\scite{\@scite}
+\def\@scite#1{\textsuperscript{\cite{#1}}}
+% 行间引用，与正文格式一致
+\DeclareRobustCommand\lcite{\@lcite}
+\def\@lcite#1{\begingroup\let\@cite\NAT@citenum\citep{#1}\endgroup}
+
+\setlength{\bibhang}{2em}
+\bibpunct{[}{]}{,}{s}{}{}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   其他设置
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 使图编号为 7-1 的格式 %\protect{~}
+\renewcommand{\thefigure}{\arabic{chapter}.\arabic{figure}}
+% 使子图编号为 (a)的格式
+\renewcommand{\thesubfigure}{(\alph{subfigure})}
+% 使子图引用为 7-1 (a) 的格式，母图编号和子图编号之间用~加一个空格
+\renewcommand{\p@subfigure}{\thefigure~}
+% 使表编号为 7-1 的格式
+\renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}
+% 使公式编号为 7-1 的格式
+\renewcommand{\theequation}{\arabic{chapter}-\arabic{equation}}
+
+%插图索引格式: 图 x. 图标题 ......页码
+\renewcommand\listoffigures{%
+    \chapter*{\listfigurename}%
+    \addcontentsline{toc}{chapter}{插图目录}
+    \markboth{\listfigurename}{\listfigurename}
+    \renewcommand{\numberline}[1]{图~##1~~}
+    \@starttoc{lof}%
+    }
+
+%表格索引格式: 表 x. 表标题 ......页码
+\renewcommand\listoftables{%
+    \chapter*{\listtablename}%
+    \addcontentsline{toc}{chapter}{表格目录}
+    \markboth{\listtablename}{\listtablename}
+    \renewcommand{\numberline}[1]{表~##1~~}
+    \@starttoc{lot}%
+    }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   图形表格
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\figurename}{\song\textbf{图}}
+\renewcommand{\tablename}{\song\textbf{表}}
+% \captionstyle{\centering}
+% \hangcaption
+\captiondelim{\hspace{1em}}
+\captiondelim{\hspace{1em}}
+\captionnamefont{\zhongwu\song}
+\captiontitlefont{\zhongwu\song}
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{0pt}
+%\captionsetup[bi-first]{font=sf}
+\newcommand{\mycaption}[3]{\bicaption[#1]{#2}{\textbf{#2}}{Table}{#3}}
+
+\newcommand{\tablepage}[2]{\begin{minipage}{#1}\vspace{0.5ex} #2 \vspace{0.5ex}\end{minipage}}
+\newcommand{\returnpage}[2]{\begin{minipage}{#1}\vspace{0.5ex} #2 \vspace{-1.5ex}\end{minipage}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   脚注格式设置
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %使用pifont包里面ding产生带圈的数字1~10
+\newcommand\chnnocirc[1]{%
+\ifcase#1 a \or {\ding{172}} \or {\ding{173}} \or {\ding{174}} \or {\ding{175}} \or {\ding{176}} \or {\ding{177}} \or {\ding{178}} \or {\ding{179}} \or {\ding{180}}\fi}
+\renewcommand{\thefootnote}{\chnnocirc{\arabic{footnote}}}
+
+% 自定义一个空命令，用于注释掉文本中不需要的部分。
+\newcommand{\comment}[1]{}
+
+% 双语章节重新定义BiChapter、BiSection等命令，可实现标题手动换行，但不影响目录
+\def\BiChapter{\relax\@ifnextchar [{\@BiChapter}{\@@BiChapter}}
+\def\@BiChapter[#1]#2#3{\chapter[#1]{#2}
+    \addcontentsline{toe}{chapter}{\bfseries \xiaosi Chapter \thechapter\hspace{0.5em} #3}}
+\def\@@BiChapter#1#2{\chapter{#1}
+    \addcontentsline{toe}{chapter}{\bfseries \xiaosi Chapter \thechapter\hspace{0.5em}{\boldmath #2}}}
+
+\newcommand{\BiSection}[2]
+{   \section{#1}
+    \addcontentsline{toe}{section}{\protect\numberline{\csname thesection\endcsname}#2}
+}
+
+\newcommand{\BiSubsection}[2]
+{    \subsection{#1}
+    \addcontentsline{toe}{subsection}{\protect\numberline{\csname thesubsection\endcsname}#2}
+}
+
+\newcommand{\BiSubsubsection}[2]
+{    \subsubsection{#1}
+    \addcontentsline{toe}{subsubsection}{\protect\numberline{\csname thesubsubsection\endcsname}#2}
+}
+
+\newcommand{\BiAppendix}[2] % 该附录命令适用于发表文章，简历等
+{\phantomsection
+\markboth{#1}{#1}
+\addcontentsline{toc}{chapter}{\xiaosi #1}
+\addcontentsline{toe}{chapter}{\bfseries \xiaosi #2}  \chapter*{#1}
+}
+
+\newcommand{\BiAppChapter}[2]    % 该附录命令适用于有章节的完整附录
+{\phantomsection
+ \chapter{#1}
+ \addcontentsline{toe}{chapter}{\bfseries \xiaosi Appendix \thechapter~~#2}
+}
+
+\def\engcontentsname{\uppercase{CONTENTS}}
+\newcommand\tableofengcontents{
+   \pdfbookmark[0]{\uppercase{CONTENTS}}{encontent}
+   \chapter*{\engcontentsname  %chapter*上移一行，避免在toc中出现
+       \@mkboth{%
+          \engcontentsname}{\engcontentsname}}
+   \@starttoc{toe}%
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 封面摘要
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\cnauthorno#1{\def\@cnauthorno{#1}}\def\@cnauthorno{}
+
+\def\cntitle#1{\def\@cntitle{#1}}\def\@cntitle{}
+\def\cnaffil#1{\def\@cnaffil{#1}}\def\@cnaffil{}
+\def\cnsubject#1{\def\@cnsubject{#1}}\def\@cnsubject{}
+\def\cnauthor#1{\def\@cnauthor{#1}}\def\@cnauthor{}
+\def\cnsupervisor#1{\def\@cnsupervisor{#1}}\def\@cnsupervisor{}
+\def\cnsupervisortitle#1{\def\@cnsupervisortitle{#1}}\def\@cnsupervisortitle{}
+\def\cnsubdate#1{\def\@cnsubdate{#1}}\def\@cnsubdate{}
+\def\cndefdate#1{\def\@cndefdate{#1}}\def\@cndefdate{}
+\long\def\cnabstract#1{\long\def\@cnabstract{#1}}\long\def\@cnabstract{}
+\def\cnkeywords#1{\def\@cnkeywords{#1}}\def\@cnkeywords{}
+%\def\cnreviewer#1{\def\@cnreviewer{#1}}\def\@cnreviewer{}
+
+\def\entitle#1{\def\@entitle{#1}}\def\@entitle{}
+\def\enaffil#1{\def\@enaffil{#1}}\def\@enaffil{}
+\def\ensubject#1{\def\@ensubject{#1}}\def\@ensubject{}
+\def\enauthor#1{\def\@enauthor{#1}}\def\@enauthor{}
+\def\ensupervisor#1{\def\@ensupervisor{#1}}\def\@ensupervisor{}
+\def\ensupervisortitle#1{\def\@ensupervisortitle{#1}}\def\@ensupervisortitle{}
+\def\ensubdate#1{\def\@ensubdate{#1}}\def\@ensubdate{}
+\def\endefdate#1{\def\@endefdate{#1}}\def\@endefdate{}
+\long\def\enabstract#1{\long\def\@enabstract{#1}}\long\def\@enabstract{}
+\def\enkeywords#1{\def\@enkeywords{#1}}\def\@enkeywords{}
+\def\enreviewer#1{\def\@enreviewer{#1}}\def\@enreviewer{}
+
+\long\def\NotationList#1{\long\def\@NotationList{#1}}\long\def\@NotationList{}
+\long\def\cnauthorization#1{\long\def\@cnauthorization{#1}}\long\def\@cnauthorization{}
+\long\def\cninnovation#1{\long\def\@cninnovation{#1}}\long\def\@cninnovation{}
+
+\def\natclassifiedindex#1{\def\@natclassifiedindex{#1}}\def\@natclassifiedindex{}
+\def\internatclassifiedindex#1{\def\@internatclassifiedindex{#1}}\def\@internatclassifiedindex{}
+
+\def\studentno#1{\def\@studentno{#1}}\def\@studentno{}
+
+\def\cnstatesecrets#1{\def\@cnstatesecrets{#1}}\def\@cnstatesecrets{}
+\def\enstatesecrets#1{\def\@enstatesecrets{#1}}\def\@enstatesecrets{}
+
+\def\cnuniversty#1{\def\@cnuniversty{#1}}\def\@cnuniversty{}
+\def\enuniversty#1{\def\@euniversity{#1}}\def\@euniversity{}
+
+% 封面
+\def\makecover{
+  \begin{titlepage}
+    %内封（扉页）
+    \newpage
+    \thispagestyle{empty}
+    \pdfbookmark[0]{\@cntitle}{cntitlepage}
+    \begin{center}
+        	\renewcommand{\arraystretch}{1.5}
+        	{\song \sihao
+        		\begin{tabular}{@{}r@{：}l@{}}
+        			分类号              & \underline{\makebox[0.35\linewidth][c]{\@natclassifiedindex}}
+        	\end{tabular}}\hfill
+        	{\song \sihao
+        		\begin{tabular}{@{}r@{：}l@{}}
+        			密 \ 级 & \underline{\makebox[0.35\linewidth][c]{}}
+        	\end{tabular}}
+        	
+        	{\song \sihao
+        		\begin{tabular}{@{}r@{：}l@{}}
+        			U \hfill D \hfill C& \underline{\makebox[0.88\linewidth][c]{}} 
+        	\end{tabular}}  
+        	
+        	\renewcommand{\arraystretch}{1}
+        	
+        	\vspace*{12mm}
+        	
+        	\centerline{\song\erhao{华~~东~~理~~工~~大~~学}}
+        	\vspace*{5mm}
+        	\centerline{\song\erhao{学~~位~~论~~文}}
+        	%                \vspace*{2mm}
+        	
+        	\underline{\parbox[t][10mm][t]{.6\textwidth}{
+        			\begin{center}\sihao\song{\textbf{\@cntitle}}\end{center}}}
+        	
+        	%	            \vspace{5mm}
+        	\underline{\parbox[t][12mm][t]{.6\textwidth}{
+        			\begin{center}\sihao\song{\@cnauthor}\end{center}}}
+        	
+        	\vspace*{4mm}
+        	\hspace*{-7em} 指导教师姓名：\underline{\parbox[c][6mm][c]{.6\textwidth}{
+        			\begin{center}\sihao\song{\@cnsupervisor}~~华东理工大学\end{center}}}
+        	
+        	\vspace*{3mm}
+        	\underline{\parbox[c][2mm][c]{.6\textwidth}{
+        			\begin{center}\sihao\song{}\end{center}}}            	
+        	
+        	\vspace*{4mm}
+        	%				\hspace*{-7em}
+        	申请学位级别：\underline{\makebox[7em][c]{\cnxuewei}}\hfill
+        	专~~~业~~名~~~称：\underline{\makebox[7em][c]{\@cnsubject}}
+        	
+        	论文定稿日期：\underline{\makebox[7em][c]{2022.04.11}}\hfill
+        	论文答辩日期：\underline{\makebox[7em][c]{2022.05.01}}
+        	
+        	\hspace*{-1.5em}学位授予单位：\underline{\makebox[22em][c]{华东理工大学}}
+        	
+        	\hspace*{-1.5em}学位授予日期：\underline{\makebox[22em][c]{}}
+        	
+        	\vspace*{4em}
+        	
+        	\hspace*{6em}
+        	\parbox[r][30mm][c]{\textwidth}
+        	{
+        		\begin{center}
+        			\begin{tabular}{ll}
+        				答辩委员会主席：& 周扒皮~~~~~ 教~~授\\
+        				评\hfill 阅\hfill 人：&周扒皮 ~~~~~教~~授\\
+        				&周扒皮 ~~~~~教~~授\\
+        				&周扒皮 ~~~~~教~~授\\
+        				&周扒皮 ~~~~~教~~授\\
+        				&周扒皮 ~~~~~教~~授\\                			
+        			\end{tabular}
+        		\end{center}
+        	}                
+      \end{center}
+
+    % 双面打印时封面后加空白页
+%    \ifoneortwosidetwoside
+%      \newpage
+%      ~~~\vspace{1em}
+%      \thispagestyle{empty}
+%    \fi
+
+    \cleardoublepage
+  \end{titlepage}
+}
+
+% 原创性与使用授权说明
+\def\authorization
+{
+    \thispagestyle{empty}
+    \@cnauthorization
+    \clearpage
+
+%    % 双面打印时加空白页
+%    \ifoneortwosidetwoside
+%      \newpage
+%      ~~~\vspace{1em}
+%      \thispagestyle{empty}
+%    \fi
+}
+
+\def\innovation
+{
+	\thispagestyle{empty}
+	\@cninnovation
+	\clearpage
+	
+%	% 双面打印时加空白页
+%	\ifoneortwosidetwoside
+%	\newpage
+%	~~~\vspace{1em}
+%	\thispagestyle{empty}
+%	\fi
+}
+
+
+\def\makeabstract{
+%	\setcounter{page}{1}
+%	\vspace*{-5em}
+	\defaultfont
+\begin{center}
+\parbox[c][20mm][c]{\linewidth}{
+	\begin{center}\sihao\hei{\@cntitle}\end{center} }  
+
+\parbox[c][20mm][c]{\linewidth}{
+	\begin{center}\sihao\song{\textbf{摘~要}}\end{center} } 
+\end{center}
+
+  {\xiaosi \song \@cnabstract}
+  \vspace{5mm}
+
+  \noindent {\hei{关键词：{\fs\@cnkeywords}}}
+  \setcounter{page}{1}
+  
+  \defaultfont
+  \cleardoublepage
+  
+\begin{center}
+	\parbox[c][20mm][c]{\textwidth}{
+		\begin{center}\sihao\hei{\textbf{\@entitle}}\end{center} }  
+	
+	\parbox[c][20mm][c]{\textwidth}{
+		\begin{center}\sihao\song{\textbf{Abstract}}\end{center} }  
+\end{center}
+	\vspace{-3mm}
+	
+  {\xiaosi \@enabstract}
+  \vspace{5mm}
+
+  \noindent {\textbf{Key Words:}}~~{\textsf{\@enkeywords}}
+  \defaultfont
+  \cleardoublepage
+}
+
+\makeatletter
+\def\hlinewd#1{%
+  \noalign{\ifnum0=`}\fi\hrule \@height #1 \futurelet
+  \reserved@a\@xhline}
+\makeatother
+
+% 定义索引生成
+\def\generateindex
+{
+  \addcontentsline{toc}{chapter}{\indexname}
+  \printindex
+  \cleardoublepage
+}
+
+\raggedbottom 

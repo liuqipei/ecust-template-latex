@@ -1,0 +1,156 @@
+% !TEX TS-program = XeLaTeX
+% !TEX encoding = UTF-8 Unicode
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  华东理工大学本硕博论文 XeLaTeX 模版 —— 主文件 main.tex
+%
+%  版本：1.0.0
+%  最后更新：
+%  修改者：Liu Qipei, Wu Xinying, liuqipei@hrbeu.edu.cn, y10170069@mail.ecust.edu.cn
+%  修订者：
+%  编译环境1：macOS 10.13  + TeXLive 2020
+%  编译环境2：Windows 10  + TeXLive 2020
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%----------  以下是学位、学科类型与打印方式选择 ---------------------
+%%只对博士论文模板进行了修订，其余类型请使用者参照博士模板进行修改即可
+%%----  1.选择学位论文类型，可以是：
+%%   Doctor    -博士
+%%   Master    -硕士
+%%   Bachelor  -学士
+\def\xuewei{Doctor}
+
+%%  2.定义学科，可以是：
+%%  Engineering   -工学
+%%  Science       -科学
+%%  Management    -管理
+%%  Arts          -艺术
+%%  Philosophy    -哲学
+%%  Economics     -经济
+%%  Laws          -法律
+%%  Education     -教育
+%%  History       -历史
+\def\xueke{Engineering}
+
+%%  3.选择字体，可以是：
+%%   adobefont     -Adobe 汉字库
+%%   windowsfont   -Windows系统汉字库
+%%   linuxfont     -Linux 系统字库
+%% 	 macOSfont     -macOS 系统字库
+\def\fontselect{adobefont}
+
+%%  4.选择打印单双面打印方式，可以是：
+%%   oneside     -单面打印
+%%   twoside     -双面打印
+\def\oneortwoside{twoside}
+
+
+%%----------  论文基本格式设置  -------------------------------------
+
+\documentclass[12pt, a4paper, openany, \oneortwoside]{book}
+
+% 字体配置文件
+\input{setup/fonts}
+% 宏包配置文件
+\input{setup/packages}
+% 格式文件
+\input{setup/format}
+
+
+%%----------  以下是论文主体，可根据内容需要进行剪裁   --------------
+
+\begin{document}
+
+%%----------  定义所有的图片文件在 figures 子目录下
+\graphicspath{{figures/}}
+
+%%----------  封面、摘要等文件导入
+\frontmatter
+\pagenumbering{Roman}             % 摘要和目录罗马字母页码
+
+\include{preface/cover}           % 封面信息定义
+\include{preface/authorization}   % 原创性声明与授权书内容
+\include{preface/abstract}        % 中英文摘要内容
+\include{preface/innovation}        % 中英文摘要内容
+
+\authorization  % 生成原创性与使用授权说明
+\makecover      % 生成封面、扉页
+\innovation    %作者声明
+\makeabstract   % 生成中英文摘要
+
+
+%%----------  设置目录字体和行间距
+\defaultmenufont
+
+%%----------  论文中文目录, 如不需要可用 % 注释掉下面两行
+\tableofcontents
+\cleardoublepage
+
+%%----------  论文英文目录, 如不需要可用 % 注释掉下面两行
+%% 如需英文目录，章节的定义需要改用\BiChapterhe和\BiSection等
+%%   \BiChapter{中文章名称}{Chapter Name In English}
+%%   \BiSection{中文节名称}{Section Name In Englsh}
+%%   \BiSubSection{中文小节名称}{SubSection Name In Englsh}
+% \tableofengcontents
+% \cleardoublepage
+
+
+%%%----------  插图目录, 如不需要可用 % 注释掉下面两行
+%\listoffigures
+%\cleardoublepage
+%
+%%%----------  表格目录, 如不需要可用 % 注释掉下面两行
+%\listoftables
+%\cleardoublepage
+
+%%----------  设置默认正文格式
+\defaultfont
+\mainmatter
+
+%%----------  正文章节, 根据需要增加
+
+\include{body/chap01}
+\include{body/chap02}
+\include{body/chap03}
+\include{body/chap04}
+\include{body/chap05}
+\include{body/chap06}
+\include{body/chap07}
+
+\cleardoublepage
+%%----------  结论, 一般都需要 , 如不需要可用 % 注释掉下面两行
+\include{body/conclusion}
+\cleardoublepage
+
+%%----------  正文后附加内容, 包括参考文献、致谢等等, 根据需要选择
+\backmatter
+
+%%----------  参考文献, 文献数据库为 reference/reference.bib
+\wuhao  % 设置参考文献字号为五号
+\bibliographystyle{GBT7714-2005}
+\bibliography{reference/reference}
+\addcontentsline{toc}{chapter}{参考文献}
+\cleardoublepage
+\defaultfont
+
+%%----------  发表的文章列表, 如不需要可用 % 注释掉下面两行
+%\include{appendix/publications}
+%\cleardoublepage
+
+%%----------  致谢, 一般都需要, 如不需要可用 % 注释掉下面两行
+\include{appendix/acknowledgements}
+\cleardoublepage
+
+%%----------  作者简介, 如不需要可用 % 注释掉下面两行
+\include{appendix/resume}
+\cleardoublepage
+
+%%----------  其他附录, 如不需要可用 % 注释掉下面几行
+\include{appendix/app01}
+%\cleardoublepage
+
+
+%%%%%%%%%%%% 到这就结束了! %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

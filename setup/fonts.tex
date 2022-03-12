@@ -1,0 +1,131 @@
+% !TEX TS-program = XeLaTeX
+% !TEX encoding = UTF-8 Unicode
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  华东理工大学本硕博论文 XeLaTeX 模版 —— 主文件 main.tex
+%
+%  版本：1.0.0
+%  最后更新：
+%  修改者：Liu Qipei, Wu Xinying, liuqipei@hrbeu.edu.cn, y10170069@mail.ecust.edu.cn
+%  修订者：
+%  编译环境1：macOS 10.13  + TeXLive 2020
+%  编译环境2：Windows 10  + TeXLive 2020
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{fontspec}
+\usepackage{xltxtra,xunicode}
+\usepackage[CJKnumber,CJKchecksingle,slantfont,boldfont]{xeCJK} % 允许斜体和粗体
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+
+\newif\iffontselectadobefont
+\newif\iffontselectwindowsfont
+\newif\iffontselectlinuxfont
+
+\def\temp{adobefont}
+\ifx\temp\fontselect
+  \fontselectadobefonttrue  \fontselectwindowsfontfalse  \fontselectlinuxfontfalse
+\fi
+
+\def\temp{windowsfont}
+\ifx\temp\fontselect
+  \fontselectadobefontfalse  \fontselectwindowsfonttrue  \fontselectlinuxfontfalse
+\fi
+
+\def\temp{linuxfont}
+\ifx\temp\fontselect
+  \fontselectadobefontfalse  \fontselectwindowsfontfalse  \fontselectlinuxfonttrue
+\fi
+
+\iffontselectadobefont
+% 字体设置特别推荐方案，需要安装 Adobe字体
+% 英文字体设置
+\setmainfont[Mapping=tex-text]{Times New Roman} %衬线字体
+\setsansfont[Mapping=tex-text]{Arial}           %无衬线字体
+\setmonofont[Mapping=tex-text]{Consolas}        %等宽字体
+
+% 中文字体设置，使用的是 Adobe 字体，保证了在 Adobe Reader / Acrobat 下优秀的显示效果
+\setCJKmainfont[BoldFont={AdobeHeitiStd-Regular}, ItalicFont={AdobeKaitiStd-Regular}]{AdobeSongStd-Light}
+\setCJKsansfont{AdobeHeitiStd-Regular}
+\setCJKmonofont{AdobeFangsongStd-Regular}
+
+% 定义字体名称，可在此添加自定义的字体
+\setCJKfamilyfont{song}{AdobeSongStd-Light}
+\setCJKfamilyfont{hei}{AdobeHeitiStd-Regular}
+\setCJKfamilyfont{kai}{AdobeKaitiStd-Regular}
+\setCJKfamilyfont{fs}{AdobeFangsongStd-Regular}
+%\setCJKfamilyfont{xkai}{STXingkai}
+\fi
+
+\iffontselectwindowsfont
+    % 英文字体设置
+    \setmainfont[Mapping=tex-text]{Times New Roman} %衬线字体
+    \setsansfont[Mapping=tex-text]{Arial}           %无衬线字体
+    \setmonofont[Mapping=tex-text]{Courier New}     %等宽字体
+
+    % 中文字体设置，使用的是 Windows 系统字体
+	\setCJKmainfont[BoldFont={SimHei}, ItalicFont={KaiTi}]{NSimSun}
+	\setCJKsansfont{SimHei}
+	\setCJKmonofont{FangSong}
+
+	\setCJKfamilyfont{song}{NSimSun}
+	\setCJKfamilyfont{hei}{SimHei}
+	\setCJKfamilyfont{kai}{KaiTi}   % XP对应 KaiTi_GB2312，Vista对应KaiTi，注意根据系统切换
+	\setCJKfamilyfont{fs}{FangSong} % XP对应 FangSong_GB2312，Vista对应FangSong，注意根据系统切换
+\fi
+
+\iffontselectlinuxfont
+    % 经典 Linux 英文字体设置方案
+    \setmainfont[Mapping=tex-text]{LMRoman10} %衬线字体
+    \setsansfont[Mapping=tex-text]{LMSans10}  %无衬线字体
+    \setmonofont[Mapping=tex-text]{LMMono10}  %等宽字体
+
+    % 中文字体设置，使用的是 Adobe 字体，保证了在 Adobe Reader / Acrobat 下优秀的显示效果
+    \setCJKmainfont[BoldFont={Adobe Heiti Std}, ItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
+    \setCJKsansfont{Adobe Heiti Std}
+    \setCJKmonofont{Adobe Fangsong Std}
+
+    % 定义字体名称，可在此添加自定义的字体
+    \setCJKfamilyfont{song}{Adobe Song Std}
+    \setCJKfamilyfont{hei}{Adobe Heiti Std}
+    \setCJKfamilyfont{kai}{Adobe Kaiti Std}
+    \setCJKfamilyfont{fs}{Adobe Fangsong Std}
+    %\setCJKfamilyfont{xkai}{STXingkai}
+\fi
+
+\newcommand{\song}{\CJKfamily{song}}
+\newcommand{\hei}{\CJKfamily{hei}}
+\newcommand{\kai}{\CJKfamily{kai}}
+\newcommand{\fs}{\CJKfamily{fs}}
+
+% 定义CJK兼容的汉字字体别名
+\def\songti{\song}
+\def\fangsong{\fs}
+\def\kaishu{\kai}
+\def\heiti{\hei}
+
+% 字号
+\newcommand{\chuhao}{\fontsize{42pt}{50.5pt}\selectfont}    % 初号，1.25  倍行距
+\newcommand{\xiaochu}{\fontsize{36pt}{45pt}\selectfont}     % 小初，1.25  倍行距
+\newcommand{\yihao}{\fontsize{26pt}{39pt}\selectfont}       % 一号，1.5  倍行距
+\newcommand{\xiaoyi}{\fontsize{24pt}{30pt}\selectfont}      % 小一，1.25 倍行距
+\newcommand{\erhao}{\fontsize{22pt}{27.5pt}\selectfont}     % 二号，1.25 倍行距
+\newcommand{\xiaoer}{\fontsize{18pt}{22.5pt}\selectfont}    % 小二，1.25 倍行距
+\newcommand{\sanhao}{\fontsize{16pt}{20pt}\selectfont}      % 三号，1.25 倍行距
+\newcommand{\xiaosan}{\fontsize{15pt}{19pt}\selectfont}     % 小三，1.25 倍行距
+\newcommand{\sihao}{\fontsize{14pt}{17.5pt}\selectfont}     % 四号，1.25倍行距
+\newcommand{\daxiaosi}{\fontsize{12pt}{18pt}\selectfont}    % 小四，1.5 倍行距
+\newcommand{\xiaosi}{\fontsize{12pt}{15pt}\selectfont}      % 小四，1.25倍行距
+\newcommand{\dawu}{\fontsize{10.5pt}{18pt}\selectfont}      % 五号，1.75倍行距
+\newcommand{\zhongwu}{\fontsize{10.5pt}{16pt}\selectfont}   % 五号，1.5 倍行距
+\newcommand{\wuhao}{\fontsize{10.5pt}{10.5pt}\selectfont}   % 五号，单倍行距
+\newcommand{\xiaowu}{\fontsize{9pt}{9pt}\selectfont}        % 小五，单倍行距
+
+% 自动调整中英文之间的空白
+% \punctstyle{quanjiao}
+\XeTeXlinebreaklocale "zh"      %中文断行
+\XeTeXlinebreakskip = 0pt plus 1pt %1pt左右弹性间距
+% 其他字体宏包
